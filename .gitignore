@@ -1,0 +1,21 @@
+# Node modules
+**/node_modules/
+
+# Python cache and artifacts
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment files
+.env
+.env.*
+
+# Test and build artifacts
+.pytest_cache/
+*.sqlite3
+*.log
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
