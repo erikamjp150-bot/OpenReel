@@ -1,0 +1,123 @@
+body {
+  margin: 0;
+  font-family: Inter, system-ui, sans-serif;
+  background: #050816;
+  color: #eef2ff;
+}
+
+.page-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.header-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.form-card,
+.video-card {
+  background: #0f172a;
+  border-radius: 20px;
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.3);
+  padding: 24px;
+}
+
+.form-card {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+.form-card input,
+.form-card textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  background: #020617;
+  color: #eef2ff;
+}
+
+.form-card button,
+.button {
+  padding: 14px 20px;
+  border-radius: 14px;
+  border: none;
+  cursor: pointer;
+  background: #7c3aed;
+  color: white;
+  font-weight: 700;
+}
+
+.button.secondary,
+.link-button {
+  background: transparent;
+  border: 1px solid rgba(226, 232, 240, 0.12);
+  color: #eef2ff;
+}
+
+.feed-grid {
+  display: grid;
+  gap: 20px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+}
+
+.video-card {
+  text-decoration: none;
+  color: inherit;
+  overflow: hidden;
+}
+
+.video-card img {
+  width: 100%;
+  border-radius: 16px;
+  object-fit: cover;
+  aspect-ratio: 16 / 9;
+}
+
+.video-meta {
+  padding: 16px 0 0;
+}
+
+.video-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.video-stats {
+  color: #94a3b8;
+  margin-top: 8px;
+}
+
+.video-player-wrapper {
+  display: grid;
+  gap: 24px;
+}
+
+.video-player {
+  width: 100%;
+  border-radius: 20px;
+  height: min(520px, 60vh);
+  background: black;
+}
+
+.progress-text,
+.status-text,
+.error-text {
+  color: #f8fafc;
+}
+
+.error-text {
+  color: #fecdd3;
+}

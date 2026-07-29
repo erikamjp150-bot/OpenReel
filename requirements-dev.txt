@@ -1,0 +1,9 @@
+pytest
+pytest-asyncio
+httpx
+fastapi
+sqlalchemy
+psycopg2-binary
+python-dotenv
+pytz
+email-validator

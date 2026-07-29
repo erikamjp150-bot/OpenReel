@@ -12,11 +12,16 @@ class VideoProcessor:
     """Handles video transcoding, thumbnail generation, and metadata extraction"""
     
     def __init__(self):
-        self.storage = StorageService()
+        self.storage = None
         self.output_dir = "/tmp/video_processing"
         os.makedirs(self.output_dir, exist_ok=True)
     
+    def _ensure_storage(self):
+        if self.storage is None:
+            self.storage = StorageService()
+
     def process_video(self, input_path: str) -> Dict[str, Any]:
+        self._ensure_storage()
         """
         Process a video: transcode to H.264, generate thumbnail, extract metadata
         """
@@ -50,7 +55,9 @@ class VideoProcessor:
             )
             
             # Clean up temporary files
-            self._cleanup(input_path, output_paths.values(), thumbnail_path)
+            self._cleanup(input_path)
+            self._cleanup(*output_paths.values())
+            self._cleanup(thumbnail_path)
             
             return {
                 "video_id": video_id,
@@ -140,7 +147,11 @@ class VideoProcessor:
         for path in paths:
             if isinstance(path, dict):
                 for p in path.values():
-                    if os.path.exists(p):
+                    if isinstance(p, str) and os.path.exists(p):
                         os.remove(p)
-            elif path and os.path.exists(path):
+            elif isinstance(path, (list, tuple, set)):
+                for p in path:
+                    if isinstance(p, str) and os.path.exists(p):
+                        os.remove(p)
+            elif isinstance(path, str) and os.path.exists(path):
                 os.remove(path)

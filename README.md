@@ -24,7 +24,37 @@ To build a short-form video platform that entertains without exploiting. OpenRee
 - **Cache**: Redis
 - **Queue**: Kafka
 
-## Quick Start
+## Running the Project
+
+### Start infrastructure
+
+```bash
+docker-compose up -d
+```
+
+### Run backend
+
+```bash
+pip install -r requirements.txt
+pip install -r requirements-dev.txt
+alembic -c backend/alembic.ini upgrade head
+uvicorn backend.app.main:app --reload --host 0.0.0.0 --port 8000
+```
+
+### Run frontend (React Native)
+
+```bash
+cd frontend/mobile
+npm install
+npm start
+```
+
+## Running Tests
+
+```bash
+pytest
+```
+
 
 ```bash
 # Clone and set up
@@ -36,17 +66,11 @@ cp .env.example .env
 docker-compose up -d
 
 # Run backend
-cd backend
-python -m venv .venv
-source .venv/bin/activate
 pip install -r requirements.txt
-uvicorn app.main:app --reload
-
-# Run Flink job
-cd ../recommendation
-python -m flink_jobs.feature_update
+alembic -c backend/alembic.ini upgrade head
+uvicorn backend.app.main:app --reload --host 0.0.0.0 --port 8000
 
 # Run frontend (React Native)
-cd ../frontend/mobile
+cd frontend/mobile
 npm install
 npm start

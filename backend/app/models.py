@@ -6,9 +6,6 @@ import pytz
 
 Base = declarative_base()
 
-def utc_now():
-    return datetime.now(pytz.UTC)
-
 class User(Base):
     __tablename__ = "users"
     
@@ -23,8 +20,8 @@ class User(Base):
     is_verified = Column(Boolean, default=False)
     follower_count = Column(Integer, default=0)
     following_count = Column(Integer, default=0)
-    created_at = Column(DateTime(timezone=True), default=utc_now)
-    updated_at = Column(DateTime(timezone=True), default=utc_now, onupdate=utc_now)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(pytz.UTC))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(pytz.UTC), onupdate=lambda: datetime.now(pytz.UTC))
     
     # Relationships
     videos = relationship("Video", back_populates="creator")
@@ -54,8 +51,8 @@ class Video(Base):
     moderation_status = Column(String(20), default='pending')  # pending, approved, rejected
     wellness_score = Column(Float, default=0.5)  # 0-1
     
-    created_at = Column(DateTime(timezone=True), default=utc_now)
-    updated_at = Column(DateTime(timezone=True), default=utc_now, onupdate=utc_now)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(pytz.UTC))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(pytz.UTC), onupdate=lambda: datetime.now(pytz.UTC))
     is_active = Column(Boolean, default=True)
     is_featured = Column(Boolean, default=False)
     
@@ -71,8 +68,8 @@ class Comment(Base):
     video_id = Column(Integer, ForeignKey("videos.id"), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
     content = Column(Text, nullable=False)
-    created_at = Column(DateTime(timezone=True), default=utc_now)
-    updated_at = Column(DateTime(timezone=True), default=utc_now, onupdate=utc_now)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(pytz.UTC))
+    updated_at = Column(DateTime(timezone=True), default=lambda: datetime.now(pytz.UTC), onupdate=lambda: datetime.now(pytz.UTC))
     is_deleted = Column(Boolean, default=False)
     
     # Relationships
@@ -87,7 +84,7 @@ class Interaction(Base):
     video_id = Column(Integer, ForeignKey("videos.id"), nullable=False)
     action = Column(String(20))  # view, like, comment, share, watch_time
     value = Column(Float)  # e.g., seconds watched
-    created_at = Column(DateTime(timezone=True), default=utc_now)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(pytz.UTC))
     
     # Relationships
     user = relationship("User", back_populates="interactions")
@@ -111,5 +108,5 @@ class ModerationLog(Base):
     ai_score = Column(JSON)  # {'violence': 0.95, 'hate_speech': 0.10}
     reviewed_by = Column(Integer, ForeignKey("users.id"), nullable=True)
     reviewed_at = Column(DateTime(timezone=True))
-    created_at = Column(DateTime(timezone=True), default=utc_now)
+    created_at = Column(DateTime(timezone=True), default=lambda: datetime.now(pytz.UTC))
     notes = Column(Text)
