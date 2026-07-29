@@ -1,14 +1,28 @@
-import os
-import sys
-from pathlib import Path
+import pytest
+from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from backend.app.main import app
+from backend.app.database import get_db
+from backend.app import models
 
-# Ensure repo root is on sys.path for package imports during tests.
-ROOT_DIR = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(ROOT_DIR))
+SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
 
-os.environ.setdefault("DATABASE_URL", "sqlite:///:memory:")
+engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False})
+TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-from backend.app.database import engine
-from backend.app.models import Base
+def override_get_db():
+    try:
+        db = TestingSessionLocal()
+        yield db
+    finally:
+        db.close()
 
-Base.metadata.create_all(bind=engine)
+app.dependency_overrides[get_db] = override_get_db
+
+@pytest.fixture(scope="module")
+def client():
+    models.Base.metadata.create_all(bind=engine)
+    with TestClient(app) as c:
+        yield c
+    models.Base.metadata.drop_all(bind=engine)
